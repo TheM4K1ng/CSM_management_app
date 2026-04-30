@@ -1,0 +1,11 @@
+{
+    "python-envs.pythonProjects": [],
+    "tailwindCSS.experimental.configFile": null,
+    "css.lint.unknownAtRules": "ignore",
+    "files.associations": {
+        ".css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+        "strings": "on"
+    }
+}
