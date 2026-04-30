@@ -1,0 +1,264 @@
+@import "tailwindcss";
+
+/* global base bits */
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+:root {
+  --top-panels-h: clamp(160px, 22vh, 220px);
+  --systems-col: clamp(260px, 30%, 380px);
+  --panels-gap: clamp(12px, 2vw, 28px);
+  --systems-w: clamp(280px, 30%, 520px);
+}
+
+/* optional scrollbar helper (your existing custom one is fine) */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.22) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 999px; }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
+
+/* component helpers */
+@layer components {
+  .card-dark {
+    @apply rounded-[18px] border bg-[rgba(18,18,18,0.78)] shadow-[0px_18px_60px_rgba(0,0,0,0.45)];
+    border-color: rgba(255,255,255,0.10); /* avoid border-white/10 if it keeps erroring */
+  }
+
+  .label-muted {
+    @apply text-xs font-extrabold text-white/75;
+  }
+
+  .input-dark {
+    @apply w-full box-border rounded-xl border px-3 py-2.5 text-white/90 outline-none;
+    background: rgba(0,0,0,0.28);
+    border-color: rgba(255,255,255,0.10);
+  }
+  .input-dark:focus {
+    border-color: rgba(255,255,255,0.18);
+    background: rgba(0,0,0,0.36);
+  }
+
+  .btn-primary {
+    @apply h-9.5 rounded-xl border px-3.5 font-extrabold text-white/90 disabled:cursor-not-allowed disabled:opacity-45;
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.10);
+  }
+
+  .btn-secondary {
+    @apply h-9.5 rounded-xl border bg-transparent px-3.5 text-white/85 cursor-pointer hover:bg-white/5;
+    border-color: rgba(255,255,255,0.10);
+  }
+
+  .app-shell {
+    @apply flex h-screen overflow-hidden bg-[#0f0f0f] text-white;
+  }
+
+  .main-area {
+    @apply relative flex min-w-0 flex-1 flex-col overflow-hidden;
+  }
+
+  .content-scroll {
+    @apply flex-1 overflow-y-auto p-6 pr-3;
+  }
+
+  .card {
+    @apply rounded-xl bg-[#111] p-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)];
+  }
+
+  .btn-icon {
+    @apply grid h-9 w-9 place-items-center rounded-[10px] border border-[#2a2a2a] bg-transparent text-white hover:bg-white/5;
+  }
+
+.page-center {
+    @apply min-h-screen bg-[#0f0f0f] text-white px-4 py-10;
+    display: grid;
+    place-items: start center;
+  }
+
+  /* The actual card width + padding (this is what makes it not dense) */
+  .page-card {
+    @apply w-full max-w-2xl rounded-[18px] border bg-[rgba(18,18,18,0.78)] shadow-[0px_18px_60px_rgba(0,0,0,0.45)] p-6;
+  }
+
+  /* Title style consistent */
+  .card-title {
+    @apply text-lg font-extrabold text-white;
+  }
+
+  /* Header row spacing */
+  .actions-row {
+    @apply flex shrink-0 gap-2.5;
+  }
+
+   .card-head {
+    @apply mb-4 flex items-start justify-between gap-3;
+  }
+
+  /* key/value field block */
+  .field-block {
+    @apply grid gap-1.5;
+  }
+
+  /* value text */
+  .field-value {
+    @apply text-sm font-extrabold text-white;
+  }
+
+  /* readonly content box */
+  .content-box {
+    @apply mt-1.5 rounded-xl border border-white/10 bg-black/20 p-3 text-sm leading-relaxed text-white/90 whitespace-pre-wrap;
+  }
+
+  /* destructive secondary button */
+  .btn-danger {
+    @apply h-9.5 rounded-xl border bg-transparent px-3.5 cursor-pointer text-red-400 hover:bg-red-500/10;
+    border-color: rgba(255,255,255,0.10);
+  }
+
+  .sidebar {
+    @apply h-screen w-full overflow-y-auto bg-[#111] sticky top-0;
+  }
+
+  .sidebar-inner {
+    @apply box-border px-4 py-4.5 pl-3;
+  }
+
+  .sidebar-top {
+    @apply flex items-center gap-2.5;
+  }
+
+  .sidebar-divider {
+    @apply my-3 h-px bg-[#222];
+  }
+
+  .sidebar-search {
+    @apply h-9 min-w-0 flex-1 rounded-[10px] border px-3 text-[13px] text-white outline-none;
+    background: #0f0f0f;
+    border-color: #1f1f1f;
+  }
+  .sidebar-search::placeholder {
+    color: #8a8a8a;
+  }
+  .sidebar-search:focus {
+    border-color: #2a2a2a;
+    background: #111;
+  }
+
+  /* Units list / root blocks */
+  .units-list {
+    @apply grid gap-1;
+  }
+
+  .sidebar-unit-block {
+    @apply grid gap-1.5;
+  }
+
+  .unit-row {
+    @apply grid w-full cursor-pointer items-center gap-2.5 rounded-xl bg-transparent px-3 py-2.5 text-[#eaeaea] transition;
+    grid-template-columns: 28px 1fr auto 40px;
+  }
+  .unit-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .unit-row.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+
+  .unit-chev {
+    @apply grid w-7 place-items-center text-[12px] text-[#8a8a8a] transition;
+    direction: ltr;
+  }
+
+  .unit-name {
+    @apply min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-semibold text-center;
+    justify-self: end;
+  }
+
+  .unit-avatar-wrap {
+    @apply grid h-10 w-10 place-items-center;
+  }
+
+  .unit-avatar {
+    @apply h-8 w-8 rounded-[10px] border border-[#2a2a2a] object-cover;
+  }
+
+  .unit-avatar.fallback {
+    @apply grid h-8 w-8 place-items-center rounded-[10px] border border-[#2a2a2a] bg-[#161616] text-[12px] font-extrabold text-[#cfcfcf];
+  }
+
+  /* Tree */
+  .tree-level {
+    @apply grid gap-1.5 border-r border-white/15 pr-4 text-[0.95em];
+    direction: rtl;
+  }
+
+  .tree-row {
+    @apply flex w-full items-center justify-between gap-1.5 rounded-lg bg-transparent px-1.5 py-1 text-[#d0d0d0] transition;
+    border: none;
+    cursor: pointer;
+  }
+  .tree-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .tree-leaf {
+    @apply flex w-full items-center gap-1.5 rounded-lg bg-transparent px-1.5 py-1 text-[#cfcfcf] transition;
+    border: none;
+    cursor: pointer;
+    text-align: right;
+    direction: rtl;
+  }
+  .tree-leaf:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .tree-leaf.active {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .tree-label {
+    @apply flex-1 text-right;
+    unicode-bidi: plaintext;
+  }
+
+  .chev {
+    @apply text-[12px] text-[#8a8a8a] flex-none;
+  }
+
+  .muted {
+    @apply text-xs font-bold text-white/60;
+  }
+
+    .search-status {
+    @apply text-xs font-bold text-white/60;
+  }
+
+  .search-hit {
+    @apply flex w-full items-center gap-1.5 rounded-lg bg-transparent px-1.5 py-1 text-[#cfcfcf] transition;
+    border: none;
+    cursor: pointer;
+    text-align: right;
+    direction: rtl;
+  }
+  .search-hit:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .search-hit-sub {
+    @apply text-[11px] font-bold text-white/55;
+  }
+}
+
+@layer utilities {
+  .scrolllbar-stable-gutter {
+    scrollbar-gutter: stable;
+  }
+}
