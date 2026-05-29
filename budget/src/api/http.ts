@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.REACT_APP_API_BASE_URL || "/api";
+// const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
+const API_BASE = "http://localhost:8000";
+console.log("API_BASE =", API_BASE);
 
 export async function apiGet<T>(path: string, init: RequestInit = {}): Promise<T> {
     const res = await fetch(`${API_BASE}${path}`, {

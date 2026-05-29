@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: oridb
+      POSTGRES_USER: csm_user
+      POSTGRES_PASSWORD: Ori140205
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./BudgetBackend
+    container_name: django_backend
+    command: gunicorn BudgetBackend.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./BudgetBackend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  frontend:
+    build: ./budget
+    container_name: react_frontend
+    ports:
+      - "3000:4173"
+    volumes:
+      - ./budget:/app
+      - /app/node_modules
