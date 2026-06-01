@@ -2,6 +2,7 @@ from django.db.models import Exists, OuterRef, Q
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.db import connection
 
 from .models import Record
 from .serializers import RecordSerializer, RecordSearchSerializer
@@ -22,6 +23,9 @@ class RecordViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = "sys_id"
 
     def get_queryset(self):
+        print("DB:", connection.settings_dict["NAME"])
+        print("Total:", Record.objects.count())
+        print("Roots:", Record.objects.filter(parent__isnull=True).count())
         child_qs = Record.objects.filter(parent=OuterRef("sys_id"))
 
         qs = (
